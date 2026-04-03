@@ -1,4 +1,4 @@
-package com.projetoqs.mylibrary;
+package com.projetogs.mylibrary;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -5,6 +5,7 @@ import com.projetogs.mylibrary.entities.Book;
 import com.projetogs.mylibrary.enums.ReadingStatus;
 import com.projetogs.mylibrary.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,12 @@ public class BookController {
             return ResponseEntity.ok(bookService.getBooksByUserIdAndStatus(id,status));
         }
         return ResponseEntity.ok(bookService.getBooksByUserId(id));
+    }
+
+    @PostMapping("/{userId}")
+    public ResponseEntity<BookDTO> createBook (@PathVariable String userId, @RequestBody BookDTO dto){
+        BookDTO created = bookService.createBook(userId, dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
 }

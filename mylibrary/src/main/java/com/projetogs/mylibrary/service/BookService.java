@@ -28,6 +28,19 @@ public class BookService {
                 .toList();
     }
 
+    public BookDTO createBook(String userId, BookDTO dto){
+        Book book = new Book();
+        book.setUserId(userId);
+        book.setTitle(dto.title());
+        book.setAuthor(dto.author());
+        book.setPublisher(dto.publisher());
+        book.setGenre(dto.genre());
+        book.setStatus(dto.status());
+
+        Book saved = bookRepository.save(book);
+        return toDTO(saved);
+    }
+
     private BookDTO toDTO(Book book) {
         return new BookDTO(
                 book.getTitle(),

@@ -2,6 +2,7 @@ package com.projetogs.mylibrary.controller;
 
 import com.projetogs.mylibrary.dto.BookDTO;
 import com.projetogs.mylibrary.entities.Book;
+import com.projetogs.mylibrary.enums.ReadingStatus;
 import com.projetogs.mylibrary.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,11 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<BookDTO>> getBooksByUserId(@PathVariable String id){
-        List<BookDTO> books = bookService.getBooksByUserId(id);
-        return ResponseEntity.ok(books);
+    public ResponseEntity<List<BookDTO>> getBooksByUserId(@PathVariable String id, @RequestParam(required = false) ReadingStatus status){
+        if (status != null){
+            return ResponseEntity.ok(bookService.getBooksByUserIdAndStatus(id,status));
+        }
+        return ResponseEntity.ok(bookService.getBooksByUserId(id));
     }
 
 }

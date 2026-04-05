@@ -41,6 +41,31 @@ public class BookService {
         return toDTO(saved);
     }
 
+    public BookDTO updateBook(String userId, String bookId, BookDTO dto){
+    Book book = bookRepository.findById(bookId)
+            .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+        if (!book.getUserId().equals(userId)){
+            throw new RuntimeException("Livro não pertence a esse usuário");
+        }
+        book.setTitle(dto.title());
+        book.setAuthor(dto.author());
+        book.setPublisher(dto.publisher());
+        book.setGenre(dto.genre());
+        book.setStatus(dto.status());
+        return toDTO(bookRepository.save(book));
+    }
+
+    public void deleteBook(String userId, String bookId){
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+        if (!book.getUserId().equals(userId)) {
+            throw new RuntimeException("Livro não pertence a esse usuário");
+        }
+        bookRepository.deleteById(bookId);
+    }
+
     private BookDTO toDTO(Book book) {
         return new BookDTO(
                 book.getTitle(),

@@ -1,7 +1,6 @@
 package com.projetogs.mylibrary.controller;
 
 import com.projetogs.mylibrary.dto.BookDTO;
-import com.projetogs.mylibrary.entities.Book;
 import com.projetogs.mylibrary.enums.ReadingStatus;
 import com.projetogs.mylibrary.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,4 +31,15 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
+    @PutMapping("/{userId}/{bookId}")
+    public ResponseEntity<BookDTO> updateBook (@PathVariable String userId, @PathVariable String bookId, @RequestBody BookDTO dto){
+        BookDTO updated = bookService.updateBook(userId, bookId, dto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{userId}/{bookId}")
+    public ResponseEntity<Void> deleteBook (@PathVariable String userId, @PathVariable String bookId){
+       bookService.deleteBook(userId, bookId);
+       return ResponseEntity.noContent().build();
+    }
 }

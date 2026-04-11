@@ -3,6 +3,7 @@ package com.projetogs.mylibrary.entities;
 import com.projetogs.mylibrary.enums.ReadingStatus;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "books")
@@ -10,6 +11,7 @@ public class Book {
     @Id
     private String id;
 
+    @DocumentReference
     @Field("user_id")
     private String userId;
 

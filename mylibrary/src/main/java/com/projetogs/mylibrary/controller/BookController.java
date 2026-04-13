@@ -3,6 +3,7 @@ package com.projetogs.mylibrary.controller;
 import com.projetogs.mylibrary.dto.BookDTO;
 import com.projetogs.mylibrary.enums.ReadingStatus;
 import com.projetogs.mylibrary.service.BookService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 @CrossOrigin(origins = "*")
+@SecurityRequirement(name = "bearer-jwt")
 public class BookController {
     @Autowired
     private BookService bookService;

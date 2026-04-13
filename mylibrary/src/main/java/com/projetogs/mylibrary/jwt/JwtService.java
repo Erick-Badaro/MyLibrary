@@ -57,8 +57,9 @@ public class JwtService {
             Jwt jwt = decodedToken(token);
             final String username = jwt.getSubject();
             String name = jwt.getClaim("name").toString();
+            String id = jwt.getClaim("id").toString();
+            return new UserSystem(id, name, username);
 
-            return new UserSystem(name, username);
         } catch(JwtException ex) {
             throw ex;
         }

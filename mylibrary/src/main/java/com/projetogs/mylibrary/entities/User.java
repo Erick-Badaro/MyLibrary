@@ -13,24 +13,14 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private List<Book> books;
 
     public User() {
     }
 
-    public User(String name, String email, String password, List<Book> books) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.books = books;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
     }
 
     public String getPassword() {
@@ -59,5 +49,9 @@ public class User {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

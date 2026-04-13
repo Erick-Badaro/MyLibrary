@@ -11,8 +11,6 @@ public class Book {
     @Id
     private String id;
 
-    @DocumentReference
-    @Field("user_id")
     private String userId;
 
     private String title;

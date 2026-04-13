@@ -11,8 +11,9 @@ public class UserSystem implements UserDetails {
 
     private final User user;
 
-    public UserSystem(String name, String email) {
+    public UserSystem(String id, String name, String email) {
         this.user = new User();
+        this.user.setId(id);
         this.user.setName(name);
         this.user.setEmail(email);
     }

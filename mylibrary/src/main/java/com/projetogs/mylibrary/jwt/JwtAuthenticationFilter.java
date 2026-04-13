@@ -30,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String autHeader = request.getHeader("Authorization");
         if (autHeader == null || !autHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-            return; // Esse return é vital para não executar o código abaixo sem o token
+            return;
         }
         final String jwt = autHeader.substring(7);
         try {

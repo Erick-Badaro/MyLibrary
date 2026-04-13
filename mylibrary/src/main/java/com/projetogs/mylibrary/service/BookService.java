@@ -36,7 +36,6 @@ public class BookService {
         book.setPublisher(dto.publisher());
         book.setGenre(dto.genre());
         book.setStatus(dto.status());
-
         Book saved = bookRepository.save(book);
         return toDTO(saved);
     }

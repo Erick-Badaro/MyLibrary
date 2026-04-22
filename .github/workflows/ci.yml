@@ -21,6 +21,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Permissão de execução no mvnw
+        run: chmod +x mvnw
+        working-directory: mylibrary
+
       - name: Executar testes
         run: ./mvnw --no-transfer-progress verify
         working-directory: mylibrary

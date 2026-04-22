@@ -28,6 +28,9 @@ jobs:
       - name: Executar testes
         run: ./mvnw --no-transfer-progress verify
         working-directory: mylibrary
+        env:
+          JWT_SECRET_RAW: "test-secret-para-ci-32bytes-minimo!!"
+          DB_NAME: "testdb"
 
       - name: Publicar relatório de cobertura (JaCoCo)
         uses: actions/upload-artifact@v4

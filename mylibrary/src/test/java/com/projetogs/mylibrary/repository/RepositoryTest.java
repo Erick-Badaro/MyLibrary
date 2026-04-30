@@ -1,6 +1,7 @@
 package com.projetogs.mylibrary.repository;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -103,6 +104,19 @@ public class RepositoryTest extends MongoTestConfig {
         assertEquals("Clean Code", found.get().getTitle());
         assertEquals("Robert Martin", found.get().getAuthor());
         assertEquals(savedUserId, found.get().getUserId());
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("RF02 - Should list all user Books")
+    void shoudListAllUserBooks(){
+        bookRepository.save(criarLivro("Clean Code", "Robert Martin", "Tecnologia", ReadingStatus.READ));
+        bookRepository.save(criarLivro("1984", "George Orwell", "Ficção", ReadingStatus.READING));
+        bookRepository.save(criarLivro("Dom Casmurro", "Machado de Assis", "Literatura", ReadingStatus.WANNA_READ));
+ 
+        List<Book> books = bookRepository.findByUserId(savedUserId);
+ 
+        assertEquals(3, books.size(), "Should return exactly 2 of the user's books");
     }
 
 }

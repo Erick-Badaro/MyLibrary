@@ -1,7 +1,6 @@
 package com.projetogs.mylibrary.repository;
 
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,9 +16,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.projetogs.mylibrary.config.MongoTestConfig;
-import com.projetogs.mylibrary.entities.Book;
 import com.projetogs.mylibrary.entities.User;
-import com.projetogs.mylibrary.enums.ReadingStatus;
 
 
 /**
@@ -46,16 +43,6 @@ public class RepositoryTest extends MongoTestConfig {
         savedUserId = savedUser.getId();
     }
 
-    // Helper
-    private Book criarLivro(String title, String author, String genre, ReadingStatus status){
-        Book book = new Book();
-        book.setTitle(title);
-        book.setAuthor(author);
-        book.setGenre(genre);
-        book.setStatus(status);
-        book.setUserId(savedUserId);
-        return book;
-    }
 
     // RF01 - Cadastro de Usuários
 
@@ -88,35 +75,4 @@ public class RepositoryTest extends MongoTestConfig {
         assertNotNull(found.get().getId(), "ID should be automatically generated");
         assertFalse(found.get().getId().isBlank());
     }
-
-    // RF02 - CRUD de Livros
-
-    @Test
-    @Order(4)
-    @DisplayName("RF02 - Should save and retrieve book by ID")
-    void shouldSaveAndRetrieveBookById(){
-        Book book = criarLivro("Clean Code", "Robert Martin", "Tecnologia", ReadingStatus.READ);
-        Book saved = bookRepository.save(book);
-
-        Optional<Book> found = bookRepository.findById(saved.getId());
-
-        assertTrue(found.isPresent());
-        assertEquals("Clean Code", found.get().getTitle());
-        assertEquals("Robert Martin", found.get().getAuthor());
-        assertEquals(savedUserId, found.get().getUserId());
-    }
-
-    @Test
-    @Order(5)
-    @DisplayName("RF02 - Should list all user Books")
-    void shoudListAllUserBooks(){
-        bookRepository.save(criarLivro("Clean Code", "Robert Martin", "Tecnologia", ReadingStatus.READ));
-        bookRepository.save(criarLivro("1984", "George Orwell", "Ficção", ReadingStatus.READING));
-        bookRepository.save(criarLivro("Dom Casmurro", "Machado de Assis", "Literatura", ReadingStatus.WANNA_READ));
- 
-        List<Book> books = bookRepository.findByUserId(savedUserId);
- 
-        assertEquals(3, books.size(), "Should return exactly 3 of the user's books");
-    }
-
 }

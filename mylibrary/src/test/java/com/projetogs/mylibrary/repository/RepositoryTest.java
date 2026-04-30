@@ -116,7 +116,7 @@ public class RepositoryTest extends MongoTestConfig {
  
         List<Book> books = bookRepository.findByUserId(savedUserId);
  
-        assertEquals(3, books.size(), "Should return exactly 2 of the user's books");
+        assertEquals(3, books.size(), "Should return exactly 3 of the user's books");
     }
 
 }

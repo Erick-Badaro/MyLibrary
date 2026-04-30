@@ -16,7 +16,9 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.projetogs.mylibrary.config.MongoTestConfig;
+import com.projetogs.mylibrary.entities.Book;
 import com.projetogs.mylibrary.entities.User;
+import com.projetogs.mylibrary.enums.ReadingStatus;
 
 
 /**
@@ -41,6 +43,17 @@ public class RepositoryTest extends MongoTestConfig {
         User user = new User("Test User", "test@email.com", "Senha@123");
         User savedUser = userRepository.save(user);
         savedUserId = savedUser.getId();
+    }
+
+    // Helper
+    private Book criarLivro(String title, String author, String genre, ReadingStatus status){
+        Book book = new Book();
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setGenre(genre);
+        book.setStatus(status);
+        book.setUserId(savedUserId);
+        return book;
     }
 
     // RF01 - Cadastro de Usuários
@@ -74,4 +87,22 @@ public class RepositoryTest extends MongoTestConfig {
         assertNotNull(found.get().getId(), "ID should be automatically generated");
         assertFalse(found.get().getId().isBlank());
     }
+
+    // RF02 - CRUD de Livros
+
+    @Test
+    @Order(4)
+    @DisplayName("RF02 - Should save and retrieve book by ID")
+    void shouldSaveAndRetrieveBookById(){
+        Book book = criarLivro("Clean Code", "Robert Martin", "Tecnologia", ReadingStatus.READ);
+        Book saved = bookRepository.save(book);
+
+        Optional<Book> found = bookRepository.findById(saved.getId());
+
+        assertTrue(found.isPresent());
+        assertEquals("Clean Code", found.get().getTitle());
+        assertEquals("Robert Martin", found.get().getAuthor());
+        assertEquals(savedUserId, found.get().getUserId());
+    }
+
 }

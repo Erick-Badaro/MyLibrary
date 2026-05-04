@@ -9,7 +9,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest
 @Testcontainers
-
 public abstract class MongoTestConfig {
     @Container
     static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0");

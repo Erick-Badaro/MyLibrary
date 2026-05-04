@@ -11,7 +11,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public abstract class MongoTestConfig {
     @Container
-    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0");
+    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:8.0");
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry){

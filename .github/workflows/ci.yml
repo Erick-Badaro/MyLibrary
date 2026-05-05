@@ -2,7 +2,7 @@ name: CI - MyLibrary
 
 on:
   push:
-    branches: [ "main", "dev" ]
+    branches: [ "main", "dev", "test/inline-mongo-config" ]
   pull_request:
     branches: [ "main", "dev" ]
 

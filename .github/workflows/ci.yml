@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Executar Testes
+    name: Executar Testes e Cobertura
     runs-on: ubuntu-latest
 
     steps:
@@ -26,9 +26,16 @@ jobs:
         run: chmod +x mvnw
         working-directory: mylibrary
 
-      - name: Executar testes
-        run: ./mvnw test --no-transfer-progress
+      - name: Executar testes com cobertura
+        run: ./mvnw clean verify --no-transfer-progress
         working-directory: mylibrary
+
+      - name: Upload do Relatório JaCoCo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: MyLibrary/mylibrary/target/site/jacoco/
 
   build:
     name: Build da Aplicação

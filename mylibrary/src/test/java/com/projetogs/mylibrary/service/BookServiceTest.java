@@ -1,6 +1,8 @@
 package com.projetogs.mylibrary.service;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -109,4 +111,33 @@ public class BookServiceTest {
         assertNotNull(saved);
     }
 
+    @Test
+    @DisplayName("Deve atualizar um livro passo pelo id")
+    public void testIUpdateBook() {
+        List<BookDTOGet> books = service.getBooksByUserId(userIdTest);
+        String bookId = books.get(0).id();
+
+        BookDTO update = new BookDTO("Arquitetura limpa", "Robert C. Martin", "Altabooks", "TI", ReadingStatus.READ);
+
+        BookDTO saved = service.updateBook(userIdTest, bookId, update);
+
+        assertNotNull(saved);
+        assertEquals("Arquitetura limpa", saved.title(), "O título deveria ter sido atualizado");
+        assertEquals("Robert C. Martin", saved.author(), "O autor deveria ter sido atualizado");
+        assertEquals(ReadingStatus.READ, saved.status(), "O status deveria ser READ");
+    }
+
+    @Test
+    @DisplayName("Deve deletar um livro passo pelo id do usuário e do livro")
+    public void testDeleteBook() {
+        List<BookDTOGet> books = service.getBooksByUserId(userIdTest);
+        String bookId = books.get(0).id();
+
+        service.deleteBook(userIdTest, bookId);
+        List<BookDTOGet> result = service.getBooksByUserId(userIdTest);
+
+        boolean isNotDelete = result.stream().anyMatch(b -> b.id().equals(bookId));
+        
+        assertFalse(isNotDelete, "O livro ainda existe no banco de dados");
+    }
 }

@@ -1,6 +1,7 @@
 package com.projetogs.mylibrary.service;
 
 import com.projetogs.mylibrary.dto.BookDTO;
+import com.projetogs.mylibrary.dto.BookDTOGet;
 import com.projetogs.mylibrary.entities.Book;
 import com.projetogs.mylibrary.enums.ReadingStatus;
 import com.projetogs.mylibrary.repository.BookRepository;
@@ -14,17 +15,17 @@ public class BookService {
 @Autowired
    private BookRepository bookRepository;
 
-    public List<BookDTO> getBooksByUserId(String userId) {
+    public List<BookDTOGet> getBooksByUserId(String userId) {
         return bookRepository.findByUserId(userId)
                 .stream()
-                .map(this::toDTO)
+                .map(this::toDTOGet)
                 .toList();
     }
 
-    public List<BookDTO> getBooksByUserIdAndStatus(String userId, ReadingStatus status){
+    public List<BookDTOGet> getBooksByUserIdAndStatus(String userId, ReadingStatus status){
         return bookRepository.findByUserIdAndStatus(userId, status)
                 .stream()
-                .map(this::toDTO)
+                .map(this::toDTOGet)
                 .toList();
     }
 
@@ -72,6 +73,17 @@ public class BookService {
                 book.getGenre(),
                 book.getPublisher(),
                 book.getStatus()
+        );
+    }
+
+    private BookDTOGet toDTOGet(Book book) {
+        return new BookDTOGet(
+            book.getId(), 
+            book.getTitle(), 
+            book.getAuthor(), 
+            book.getPublisher(), 
+            book.getGenre(), 
+            book.getStatus()
         );
     }
 }

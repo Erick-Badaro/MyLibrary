@@ -1,6 +1,7 @@
 package com.projetogs.mylibrary.controller;
 
 import com.projetogs.mylibrary.dto.BookDTO;
+import com.projetogs.mylibrary.dto.BookDTOGet;
 import com.projetogs.mylibrary.enums.ReadingStatus;
 import com.projetogs.mylibrary.security.UserSystem;
 import com.projetogs.mylibrary.service.BookService;
@@ -22,7 +23,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping()
-    public ResponseEntity<List<BookDTO>> getBooksByUserId(@RequestParam(required = false) ReadingStatus status, Authentication authentication){
+    public ResponseEntity<List<BookDTOGet>> getBooksByUserId(@RequestParam(required = false) ReadingStatus status, Authentication authentication){
         UserSystem user = (UserSystem) authentication.getPrincipal();
         String id = user.getId();
         if (status != null){

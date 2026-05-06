@@ -20,6 +20,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.projetogs.mylibrary.dto.BookDTO;
+import com.projetogs.mylibrary.dto.BookDTOGet;
 import com.projetogs.mylibrary.enums.ReadingStatus;
 import com.projetogs.mylibrary.repository.BookRepository;
 
@@ -85,16 +86,16 @@ public class BookServiceTest {
     @Test
     @DisplayName("Deve buscar os livros de um usuário no banco")
     public void testGetBooksByUserId() {
-        List<BookDTO> result = service.getBooksByUserId(userIdTest);
+        List<BookDTOGet> result = service.getBooksByUserId(userIdTest);
         assertTrue(!result.isEmpty());
     }
 
     @Test
     @DisplayName("Deve buscar os livros de um usuário pelo id e pelo status de leitura no banco")
     public void testGetBooksByUserIdAndStatus() {
-        List<BookDTO> resultRead = service.getBooksByUserIdAndStatus(userIdTest, ReadingStatus.READ);
-        List<BookDTO> resultReading = service.getBooksByUserIdAndStatus(userIdTest, ReadingStatus.READING);
-        List<BookDTO> resultWannaRead = service.getBooksByUserIdAndStatus(userIdTest, ReadingStatus.WANNA_READ);
+        List<BookDTOGet> resultRead = service.getBooksByUserIdAndStatus(userIdTest, ReadingStatus.READ);
+        List<BookDTOGet> resultReading = service.getBooksByUserIdAndStatus(userIdTest, ReadingStatus.READING);
+        List<BookDTOGet> resultWannaRead = service.getBooksByUserIdAndStatus(userIdTest, ReadingStatus.WANNA_READ);
         assertTrue(!resultRead.isEmpty());
         assertTrue(!resultReading.isEmpty());
         assertTrue(!resultWannaRead.isEmpty());

@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: jacoco-report
-          path: MyLibrary/mylibrary/target/site/jacoco/
+          path: mylibrary/target/site/jacoco/
 
   build:
     name: Build da Aplicação

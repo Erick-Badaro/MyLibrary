@@ -22,6 +22,8 @@ class MylibraryApplicationTests {
 	@DynamicPropertySource
 	static void setProperties(DynamicPropertyRegistry registry) {
 		registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+
+		registry.add("spring.data.mongodb.database", () -> "mylibrarytest");
 	}
 
 	@Test

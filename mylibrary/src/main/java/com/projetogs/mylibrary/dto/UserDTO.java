@@ -16,5 +16,13 @@ public record UserDTO(
         @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$")
         @Size(min = 8)
         @NotBlank
-        String password) {
+        String password,
+        String zipCode,
+        String street,
+        String neighborhood,
+        String city,
+        String state,
+        String number,
+        String complement
+) {
 }

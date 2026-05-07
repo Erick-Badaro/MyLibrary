@@ -93,6 +93,17 @@ public class BookServiceTest {
     }
 
     @Test
+    @DisplayName("Deve retornar lista vazia quando o usuário não possui livros")
+    public void testGetBooksByUserId_NotFound() {
+        String idSemLivros = new ObjectId().toHexString();
+
+        List<BookDTOGet> result = service.getBooksByUserId(idSemLivros);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     @DisplayName("Deve buscar os livros de um usuário pelo id e pelo status de leitura no banco")
     public void testGetBooksByUserIdAndStatus() {
         List<BookDTOGet> resultRead = service.getBooksByUserIdAndStatus(userIdTest, ReadingStatus.READ);
@@ -137,7 +148,7 @@ public class BookServiceTest {
         List<BookDTOGet> result = service.getBooksByUserId(userIdTest);
 
         boolean isNotDelete = result.stream().anyMatch(b -> b.id().equals(bookId));
-        
+
         assertFalse(isNotDelete, "O livro ainda existe no banco de dados");
     }
 }

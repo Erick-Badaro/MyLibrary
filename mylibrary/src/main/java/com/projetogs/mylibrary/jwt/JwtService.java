@@ -1,7 +1,5 @@
 package com.projetogs.mylibrary.jwt;
 
-import com.nimbusds.jwt.proc.BadJWTException;
-import com.projetogs.mylibrary.entities.User;
 import com.projetogs.mylibrary.security.UserSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;

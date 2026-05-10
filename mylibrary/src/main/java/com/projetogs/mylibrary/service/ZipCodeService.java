@@ -3,6 +3,8 @@ package com.projetogs.mylibrary.service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
+
 
 import com.projetogs.mylibrary.dto.ZipCodeResponseDTO;
 
@@ -10,10 +12,12 @@ import com.projetogs.mylibrary.dto.ZipCodeResponseDTO;
 public class ZipCodeService {
 
     private final RestTemplate restTemplate;
-    private static final String VIACEP_URL = "https://viacep.com.br/ws/";
-
-    public ZipCodeService(RestTemplate restTemplate) {
+    private final String viaCepUrl; 
+    
+    public ZipCodeService(RestTemplate restTemplate,
+            @Value("${viacep.url:https://viacep.com.br/ws/}") String viaCepUrl) {
         this.restTemplate = restTemplate;
+        this.viaCepUrl = viaCepUrl;
     }
 
     public ZipCodeResponseDTO fetchZipCode(String zipCode) {
@@ -24,7 +28,7 @@ public class ZipCodeService {
                 throw new IllegalArgumentException("CEP deve conter 8 dígitos");
             }
 
-            String url = VIACEP_URL + cleanZipCode + "/json/";
+            String url = viaCepUrl + cleanZipCode + "/json/";  // ← 3. usa o campo
             ZipCodeResponseDTO response = restTemplate.getForObject(url, ZipCodeResponseDTO.class);
 
             if (response != null && response.getZipCode() != null && !response.getZipCode().isEmpty()) {

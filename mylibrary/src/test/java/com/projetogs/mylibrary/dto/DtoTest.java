@@ -51,11 +51,13 @@ public class DtoTest {
     }
 
     @ParameterizedTest
-        if (isValid) {
-            assertTrue(violations.isEmpty());
-        } else {
-            assertFalse(violations.isEmpty());
-        }
+    @CsvSource({
+            "'joao@email.com', 'SenhaCorreta@1', true",
+            "'joaoemail.com', 'SenhaCorreta@1', false",
+            "'joao@email.com', 'errado', false",
+            "'joao@emailcom', '', false",
+            "'', '', false"
+    })
     public void testUserLoginDTO(String email, String password, boolean isValid) {
         UserLoginDTO dto = new UserLoginDTO(email, password);
 

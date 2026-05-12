@@ -33,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = {
                 "api.security.token.secret=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30"
@@ -41,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Testcontainers
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-public class BookControllerE2eTest {
+public class BookControllerE2ETest {
 
         @Container
         static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7");
@@ -128,7 +127,7 @@ public class BookControllerE2eTest {
 
         @Test
         @DisplayName("E2E api book - POST /books - deve retornar 201")
-        public void shouldCreatBook() throws Exception {
+        public void shouldCreateBook() throws Exception {
                 BookDTO book = new BookDTO(
                                 "Clean code",
                                 "Robert .C Martin",

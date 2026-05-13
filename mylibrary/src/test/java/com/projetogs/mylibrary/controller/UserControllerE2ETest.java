@@ -1,6 +1,8 @@
 package com.projetogs.mylibrary.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -106,7 +108,44 @@ public class UserControllerE2ETest {
         mvc.perform(post("/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").exists())
+                .andExpect(jsonPath("$.name").value("João Silva"));
+    }
 
+    @Test
+    @DisplayName("E2E api user - POST /user/login - deve retornar 401 para senha incorreta mas válida no formato")
+    public void shouldLoginUserUnauthorized() throws Exception {
+        UserDTO user = new UserDTO(
+                "João Silva",
+                "joao@email.com",
+                "Senha@123",
+                "01001-000",
+                "Rua Direita",
+                "Centro",
+                "São Paulo",
+                "SP",
+                "100",
+                "Ap 1");
+        service.addNewUser(user);
+
+        
+        UserLoginDTO login = new UserLoginDTO("joao@email.com", "Errada@123");
+
+        String json = objectMapper.writeValueAsString(login);
+
+        mvc.perform(post("/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("E2E api user - GET /user/zipcode/{zipCode} - Deve retornar o ZipCodeResponse e http 200(ok)")
+    public void chouldReturnZipcode() throws Exception {
+        String zipCode = "01001-000";
+        mvc.perform(get("/user/zipcode/" + zipCode))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.cep").exists());
     }
 }

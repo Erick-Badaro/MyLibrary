@@ -156,6 +156,16 @@ public class BookServiceTest {
     }
 
     @Test
+    @DisplayName("Deve impedir de atualizar um livro pelo id inexistente")
+    public void testIUpdateBookInvalidUserIdNotFound() {
+        BookDTO update = new BookDTO("Arquitetura limpa", "Robert C. Martin", "Altabooks", "TI", ReadingStatus.READ);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            service.updateBook(userIdTestInvalid, "29587", update);
+        });
+        assertEquals("Livro não encontrado", exception.getMessage());
+    }
+
+    @Test
     @DisplayName("Deve deletar um livro passo pelo id do usuário e do livro")
     public void testDeleteBook() {
         List<BookDTOGet> books = service.getBooksByUserId(userIdTest);
@@ -179,5 +189,14 @@ public class BookServiceTest {
             service.deleteBook(userIdTestInvalid, bookId);
         });
         assertEquals("Livro não pertence a esse usuário", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Deve impedir de deletar um livro passo pelo id do usuário inválido e do livro")
+    public void testDeleteNotFoundBook() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            service.deleteBook(userIdTestInvalid, "349087");
+        });
+        assertEquals("Livro não encontrado", exception.getMessage());
     }
 }

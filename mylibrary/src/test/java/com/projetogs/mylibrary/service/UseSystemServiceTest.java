@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -75,8 +75,10 @@ public class UseSystemServiceTest {
     public void loadUserByUsernameNotFoundTest() {
         String emailInexistente = "naoexiste@email.com";
         
-        assertThrows(UsernameNotFoundException.class, () -> {
+        UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class, () -> {
             service.loadUserByUsername(emailInexistente);
         });
+
+        assertEquals("Usuário não encontrado", exception.getMessage());
     }
 }

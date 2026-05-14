@@ -68,11 +68,15 @@ public class UserController {
 
     @GetMapping("/zipcode/{zipCode}")
     public ResponseEntity<ZipCodeResponseDTO> fetchZipCode(@PathVariable String zipCode) {
-        ZipCodeResponseDTO responseInfo = zipCodeService.fetchZipCode(zipCode);
-        if (responseInfo != null && responseInfo.getZipCode() != null) {
-            return ResponseEntity.ok(responseInfo);
+        try {
+            ZipCodeResponseDTO responseInfo = zipCodeService.fetchZipCode(zipCode);
+            if (responseInfo != null && responseInfo.getZipCode() != null) {
+                return ResponseEntity.ok(responseInfo);
+            }
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 
     public record responseLogin(String name, String token) {

@@ -3,6 +3,7 @@ package com.projetogs.mylibrary.service;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -51,9 +52,12 @@ public class BookServiceTest {
 
     private String userIdTest;
 
+    private String userIdTestInvalid;
+
     @BeforeEach
     public void setUp() {
         userIdTest = new ObjectId().toHexString();
+        userIdTestInvalid = new ObjectId().toHexString();
         BookDTO livroParaLer = new BookDTO(
                 "O Silmarillion",
                 "J.R.R. Tolkien",
@@ -139,6 +143,29 @@ public class BookServiceTest {
     }
 
     @Test
+    @DisplayName("Deve impedir de atualizar um livro pelo id inválido")
+    public void testIUpdateBookInvalidUserId() {
+        List<BookDTOGet> books = service.getBooksByUserId(userIdTest);
+        String bookId = books.get(0).id();
+
+        BookDTO update = new BookDTO("Arquitetura limpa", "Robert C. Martin", "Altabooks", "TI", ReadingStatus.READ);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            service.updateBook(userIdTestInvalid, bookId, update);
+        });
+        assertEquals("Livro não pertence a esse usuário", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Deve impedir de atualizar um livro pelo id inexistente")
+    public void testIUpdateBookInvalidUserIdNotFound() {
+        BookDTO update = new BookDTO("Arquitetura limpa", "Robert C. Martin", "Altabooks", "TI", ReadingStatus.READ);
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            service.updateBook(userIdTestInvalid, "29587", update);
+        });
+        assertEquals("Livro não encontrado", exception.getMessage());
+    }
+
+    @Test
     @DisplayName("Deve deletar um livro passo pelo id do usuário e do livro")
     public void testDeleteBook() {
         List<BookDTOGet> books = service.getBooksByUserId(userIdTest);
@@ -150,5 +177,26 @@ public class BookServiceTest {
         boolean isNotDelete = result.stream().anyMatch(b -> b.id().equals(bookId));
 
         assertFalse(isNotDelete, "O livro ainda existe no banco de dados");
+    }
+
+    @Test
+    @DisplayName("Deve impedir de deletar um livro passo pelo id do usuário inválido e do livro")
+    public void testDeleteBookInvalidIdUser() {
+        List<BookDTOGet> books = service.getBooksByUserId(userIdTest);
+        String bookId = books.get(0).id();
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            service.deleteBook(userIdTestInvalid, bookId);
+        });
+        assertEquals("Livro não pertence a esse usuário", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Deve impedir de deletar um livro passo pelo id do usuário inválido e do livro")
+    public void testDeleteNotFoundBook() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            service.deleteBook(userIdTestInvalid, "349087");
+        });
+        assertEquals("Livro não encontrado", exception.getMessage());
     }
 }

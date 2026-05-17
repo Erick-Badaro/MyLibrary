@@ -1,6 +1,7 @@
 package com.projetogs.mylibrary.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.DisplayName;
@@ -55,6 +56,7 @@ public class UserServiceTest {
         assertEquals(name, result.name());
         assertEquals(email, result.email());
         assertNotNull(result.password());
+        assertNotEquals(password, result.password());
         assertEquals(city, result.city());
 
     }

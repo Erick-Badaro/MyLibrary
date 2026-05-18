@@ -26,7 +26,6 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Resposta do Backend:", data);
         localStorage.setItem("token", data.token);
         localStorage.setItem("userName", data.name);
         setSuccessMessage("Login realizado com sucesso! Entrando...");

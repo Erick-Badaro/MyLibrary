@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BookOpen } from "lucide-react";
+import { BookOpen, CheckCircle2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {

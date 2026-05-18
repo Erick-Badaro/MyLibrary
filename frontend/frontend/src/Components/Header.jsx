@@ -1,0 +1,46 @@
+import React, { useState } from "react";
+import { BookOpen, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
+const Header = () => {
+    
+    const [userName] = useState(() => {
+        return localStorage.getItem("userName") || "";
+    });
+    
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+
+        navigate("/login");
+    };
+
+    return (
+        <header className="w-full bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between shadow-sm">
+            <div className="flex items-center gap-3">
+                <div className="bg-indigo-50 p-2 rounded-xl">
+                    <BookOpen className="w-6 h-6 text-indigo-600" />
+                </div>
+                <h1 className="text-xl font-bold text-gray-900">Minha Biblioteca</h1>
+            </div>
+
+            <div className="flex items-center gap-6">
+                <span className="text-gray-600 font-medium">
+                    Olá, {userName || "Usuário"}
+                </span>
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 text-red-500 hover:text-red-600 transition-colors duration-200 font-medium"
+                    title="Sair do sistema"
+                >
+                    <LogOut className="w-5 h-5 cursor-pointer" />
+                    <span>Sair</span>
+                </button>
+            </div>
+        </header>
+    );
+};
+
+export default Header;

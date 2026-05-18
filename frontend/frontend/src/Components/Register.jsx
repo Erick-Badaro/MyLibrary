@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { BookOpen } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [zipLoading, setZipLoading] = useState(false);
   const [zipError, setZipError] = useState("");
-  
+  const [registerError, setRegisterError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,7 +37,7 @@ const Register = () => {
     setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
-    const handleZipCodeChange = async (e) => {
+  const handleZipCodeChange = async (e) => {
     const value = e.target.value;
     const zipCode = value.replace(/\D/g, "");
     setFormData((prev) => ({ ...prev, zipCode: value }));
@@ -69,9 +73,34 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Dados do formulário:", formData);
+    setRegisterError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("http://localhost:8080/user/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSuccessMessage("Cadastro realizado com sucesso! Redirecionando...");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } else {
+        setRegisterError("Erro ao cadastrar. Verifique os dados informados.");
+      }
+    } catch (error) {
+      console.error("Erro no cadastro:", error);
+      setRegisterError("Erro de comunicação com o servidor.");
+    } finally {
+      setIsSubmitting(false)
+    }
   };
 
   return (
@@ -90,7 +119,19 @@ const Register = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {step === 1 && (
+          {successMessage && (
+            <div className="p-4 mb-4 text-sm text-emerald-700 bg-emerald-50 rounded-xl flex items-center gap-2 border border-emerald-100 col-span-full transition-all">
+              <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+              <span className="font-medium">{successMessage}</span>
+            </div>
+          )}
+
+          {registerError && !successMessage && (
+            <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg col-span-full">
+              {registerError}
+            </div>
+          )}
+          {step === 1 && !successMessage && (
             <>
               <div>
                 <label
@@ -154,7 +195,7 @@ const Register = () => {
             </>
           )}
 
-          {step === 2 && (
+          {step === 2 && !successMessage && (
             <>
               <div className="grid grid-cols-3 gap-4">
                 <div className="col-span-1">
@@ -298,9 +339,10 @@ const Register = () => {
                 </button>
                 <button
                   type="submit"
-                  className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2.5 rounded-lg transition-colors duration-200"
+                  disabled={isSubmitting}
+                  className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:bg-indigo-300 text-white font-medium py-2.5 rounded-lg transition-colors duration-200"
                 >
-                  Cadastrar
+                  {isSubmitting ? "Cadastrando..." : "Cadastrar"}
                 </button>
               </div>
             </>

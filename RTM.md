@@ -25,15 +25,12 @@ sequenceDiagram
     actor U as Usuário
     participant C as UserController
     participant S as UserService
-    participant Z as ZipCodeService
     participant R as UserRepository
     participant DB as MongoDB
 
     U->>C: POST /user/signup { name, email, password, zipCode, ... }
     C->>C: @Valid — valida UserDTO (email, senha, @NotBlank)
     C->>S: addNewUser(UserDTO)
-    S->>Z: fetchZipCode(zipCode)
-    Z-->>S: ZipCodeResponseDTO { street, city, state... }
     S->>S: passwordEncoder.encode(password)
     S->>R: save(User)
     R->>DB: insertOne(users)

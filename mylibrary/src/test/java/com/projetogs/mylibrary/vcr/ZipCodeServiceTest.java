@@ -8,140 +8,134 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 
 import com.projetogs.mylibrary.service.ZipCodeService;
+import com.projetogs.mylibrary.util.VcrHelper;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.web.client.RestTemplate;
 
 import com.projetogs.mylibrary.dto.ZipCodeResponseDTO;
 
-import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ZipCodeServiceTest {
 
-    private MockWebServer mockWebServer;
-    private ZipCodeService zipCodeService;
+        private MockWebServer mockWebServer;
+        private ZipCodeService zipCodeService;
+        private VcrHelper vcrHelper;
 
-    private static final String VIACEP_RESPONSE_VALIDO = """
-            {
-                "cep": "01310-100",
-                "logradouro": "Avenida Paulista",
-                "complemento": "de 1 a 610 - lado par",
-                "bairro": "Bela Vista",
-                "localidade": "São Paulo",
-                "uf": "SP"
-            }
-            """;
+        @BeforeEach
+        void setUp() throws IOException {
+                mockWebServer = new MockWebServer();
+                mockWebServer.start();
 
-    private static final String VIACEP_RESPONSE_CEP_INEXISTENTE = """
-            {
-                "erro": true
-            }
-            """;
+                String baseUrl = mockWebServer.url("/ws/").toString();
+                zipCodeService = new ZipCodeService(new RestTemplate(), baseUrl);
+        }
 
-    @BeforeEach
-    void setUp() throws IOException {
-        mockWebServer = new MockWebServer();
-        mockWebServer.start();
+        @AfterEach
+        void tearDown() throws IOException {
+                mockWebServer.shutdown();
 
-        String baseUrl = mockWebServer.url("/ws/").toString();
-        zipCodeService = new ZipCodeService(new RestTemplate(), baseUrl);
-    }
+                if (vcrHelper != null) {
+                        vcrHelper.stop();
+                        vcrHelper = null;
+                }
+        }
 
-    @AfterEach
-    void tearDown() throws IOException {
-        mockWebServer.shutdown();
-    }
+        @Test
+        @Order(1)
+        @DisplayName("VCR - Deve retornar dados do CEP válido gravados da API ViaCEP")
+        void shouldReturnValidZipCode() throws IOException, InterruptedException {
+                vcrHelper = new VcrHelper("src/test/resources/vcr-cassettes", "cep", false);
+                vcrHelper.start();
 
-    @Test
-    @DisplayName("VCR - Deve retornar dados do CEP válido gravados da API ViaCEP")
-    void deveRetornarDadosParaCepValido() throws InterruptedException {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(200)
-                .addHeader("Content-Type", "application/json")
-                .setBody(VIACEP_RESPONSE_VALIDO));
+                String baseUrl = vcrHelper.getUrl("/");
+                zipCodeService = new ZipCodeService(new RestTemplate(), baseUrl);
 
-        ZipCodeResponseDTO response = zipCodeService.fetchZipCode("01310100");
+                ZipCodeResponseDTO response = zipCodeService.fetchZipCode("01310100");
 
-        assertNotNull(response);
-        assertEquals("01310-100", response.getZipCode());
-        assertEquals("Avenida Paulista", response.getStreet());
-        assertEquals("Bela Vista", response.getNeighborhood());
-        assertEquals("São Paulo", response.getCity());
-        assertEquals("SP", response.getState());
+                assertNotNull(response);
+                assertEquals("01310-100", response.getZipCode());
+                assertEquals("Avenida Paulista", response.getStreet());
+                assertEquals("Bela Vista", response.getNeighborhood());
+                assertEquals("São Paulo", response.getCity());
+                assertEquals("SP", response.getState());
 
-        RecordedRequest request = mockWebServer.takeRequest();
-        assertTrue(request.getPath().contains("01310100"),
-                "A URL da requisição deve conter o CEP sem hífen");
-    }
+                RecordedRequest request = vcrHelper.getMockWebServer().takeRequest(2,
+                                java.util.concurrent.TimeUnit.SECONDS);
 
-    @Test
-    @DisplayName("VCR - Deve aceitar CEP formatado com hífen e normalizar antes da chamada")
-    void deveAceitarCepFormatadoComHifen() throws InterruptedException {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(200)
-                .addHeader("Content-Type", "application/json")
-                .setBody(VIACEP_RESPONSE_VALIDO));
+                assertNotNull(request, "A requisição deveria ter sido capturada pelo VCR");
+                assertTrue(request.getPath().contains("01310100"),
+                                "A URL da requisição deve conter o CEP sem hífen");
+        }
 
-        ZipCodeResponseDTO response = zipCodeService.fetchZipCode("01310-100");
+        @Test
+        @Order(2)
+        @DisplayName("VCR - Deve aceitar CEP formatado com hífen e normalizar antes da chamada")
+        void ShouldAcceptZipCodeHifen() throws IOException, InterruptedException {
+                vcrHelper = new VcrHelper("src/test/resources/vcr-cassettes", "cep", false);
+                vcrHelper.start();
 
-        assertNotNull(response);
-        assertEquals("01310-100", response.getZipCode());
+                String baseUrl = vcrHelper.getUrl("/");
+                zipCodeService = new ZipCodeService(new RestTemplate(), baseUrl);
 
-        RecordedRequest request = mockWebServer.takeRequest();
-        assertTrue(request.getPath().contains("01310100"),
-                "O CEP deve ser enviado sem hífen para a API");
-    }
+                ZipCodeResponseDTO response = zipCodeService.fetchZipCode("01310-100");
 
-    @Test
-    @DisplayName("VCR - Deve lançar exceção para CEP não encontrado na API")
-    void deveLancarExcecaoParaCepNaoEncontrado() {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(200)
-                .addHeader("Content-Type", "application/json")
-                .setBody(VIACEP_RESPONSE_CEP_INEXISTENTE));
+                assertNotNull(response);
+                assertEquals("01310-100", response.getZipCode());
 
-        assertThrows(IllegalArgumentException.class, () ->
-                        zipCodeService.fetchZipCode("00000000"),
-                "Deve lançar exceção para CEP inexistente");
-    }
+                RecordedRequest request = vcrHelper.getMockWebServer().takeRequest(2,
+                                java.util.concurrent.TimeUnit.SECONDS);
+                assertTrue(request.getPath().contains("01310100"),
+                                "O CEP deve ser enviado sem hífen para a API");
+        }
 
-    @ParameterizedTest
-    @ValueSource(strings = { "123", "1234567", "123456789", "abcdefgh" })
-    @DisplayName("VCR - Deve lançar exceção para CEP com quantidade de dígitos inválida")
-    void deveLancarExcecaoParaCepComFormatoInvalido(String cepInvalido) {
-        assertThrows(IllegalArgumentException.class, () ->
-                        zipCodeService.fetchZipCode(cepInvalido),
-                "Deve lançar exceção para CEP inválido: " + cepInvalido);
-    }
+        @Test
+        @Order(3)
+        @DisplayName("VCR - Deve lançar exceção para CEP não encontrado na API")
+        void shouldThrowExceptionWhenZipCodeNotFound() throws IOException {
+                vcrHelper = new VcrHelper("src/test/resources/vcr-cassettes", "cepNotFound", false);
+                vcrHelper.start();
 
-    @Test
-    @DisplayName("VCR - Deve lançar RuntimeException quando a API retorna erro HTTP 503")
-    void deveLancarExcecaoQuandoApiRetornaErroHttp() {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(503));
+                String baseUrl = vcrHelper.getUrl("/");
+                zipCodeService = new ZipCodeService(new RestTemplate(), baseUrl);
 
-        assertThrows(RuntimeException.class, () ->
-                        zipCodeService.fetchZipCode("01310100"),
-                "Deve lançar RuntimeException para erro HTTP da API");
-    }
+                assertThrows(IllegalArgumentException.class, () -> zipCodeService.fetchZipCode("00000000"),
+                                "Deve lançar exceção para CEP inexistente");
+        }
 
-    @Test
-    @DisplayName("VCR - Deve confirmar que exatamente uma requisição foi feita para a API")
-    void deveConfirmarUmaRequisicaoFeita() throws InterruptedException {
-        mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(200)
-                .addHeader("Content-Type", "application/json")
-                .setBody(VIACEP_RESPONSE_VALIDO));
+        @ParameterizedTest
+        @Order(4)
+        @ValueSource(strings = { "123", "1234567", "123456789", "abcdefgh" })
+        @DisplayName("VCR - Deve lançar exceção para CEP com quantidade de dígitos inválida")
+        void shouldThrowExceptionWhenZipCodeFormatIsInvalid(String cepInvalido) {
+                assertThrows(IllegalArgumentException.class, () -> zipCodeService.fetchZipCode(cepInvalido),
+                                "Deve lançar exceção para CEP inválido: " + cepInvalido);
+        }
 
-        zipCodeService.fetchZipCode("01310100");
+        @Test
+        @Order(5)
+        @DisplayName("VCR - Deve confirmar que exatamente uma requisição foi feita para a API")
+        void shouldConfirmOnlyOneRequestIsMade() throws InterruptedException, IOException {
+                vcrHelper = new VcrHelper("src/test/resources/vcr-cassettes", "cep", false);
+                vcrHelper.start();
 
-        assertEquals(1, mockWebServer.getRequestCount(),
-                "Deve ter feito exatamente 1 requisição para a API");
-    }
+                String baseUrl = vcrHelper.getUrl("/");
+                zipCodeService = new ZipCodeService(new RestTemplate(), baseUrl);
+
+                zipCodeService.fetchZipCode("01310100");
+
+                assertEquals(1, vcrHelper.getMockWebServer().getRequestCount(),
+                                "Deve ter feito exatamente 1 requisição para a API");
+        }
 }

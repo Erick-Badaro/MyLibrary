@@ -208,15 +208,15 @@ const Home = () => {
       <Header />
 
       {toast.show && (
-        <div className="fixed top-20 right-8 z-50 bg-emerald-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2">
+        <div className="fixed top-20 right-4 sm:right-8 z-50 bg-emerald-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 max-w-[90%] w-auto">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
           <span className="font-medium text-sm">{toast.message}</span>
         </div>
       )}
 
-      <main className="p-8 max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-10 gap-4 flex-wrap">
-          <div className="relative w-72">
+      <main className="p-4 sm:p-8 max-w-7xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+          <div className="relative w-full sm:w-72 shrink-0">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
@@ -227,7 +227,7 @@ const Home = () => {
             />
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 w-full sm:w-auto hide-scrollbar">
             {[
               { id: "ALL", label: "Todos" },
               { id: "WANNA_READ", label: "Quero Ler" },
@@ -275,14 +275,14 @@ const Home = () => {
               <h2 className="text-xl font-bold text-gray-800">Meus Livros</h2>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-4 py-2 rounded-lg transition-colors text-sm"
+                className="flex items-center gap-1.5 sm:gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm"
               >
                 <Plus className="w-4 h-4" />
-                Adicionar
+                <span className="hidden sm:inline">Adicionar</span>
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
               {displayedBooks.map((book) => (
                 <div
                   key={book.id}
@@ -337,8 +337,8 @@ const Home = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-[450px] shadow-xl overflow-hidden">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100">
+          <div className="bg-white rounded-2xl w-full max-w-[450px] shadow-xl overflow-hidden max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center p-5 sm:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
               <h3 className="font-bold text-lg text-gray-900">
                 Adicionar Livro
               </h3>
@@ -380,7 +380,7 @@ const Home = () => {
                   className={inputClass}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-600 mb-1.5">
                     Gênero
@@ -449,8 +449,8 @@ const Home = () => {
 
       {isModalUpdateOpen && editingBook && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-[450px] shadow-xl overflow-hidden">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100">
+          <div className="bg-white rounded-2xl w-full max-w-[450px] shadow-xl overflow-hidden max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center p-5 sm:p-6 border-b border-gray-100 sticky top-0 bg-white z-10">
               <h3 className="font-bold text-lg text-gray-900">
                 Atualizar Livro
               </h3>
@@ -492,7 +492,7 @@ const Home = () => {
                   className={inputClass}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-600 mb-1.5">
                     Gênero
@@ -565,7 +565,7 @@ const Home = () => {
       {isDeleteModalOpen && bookToDelete && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl w-full max-w-[380px] shadow-xl overflow-hidden">
-            <div className="p-6 flex flex-col items-center text-center gap-4">
+            <div className="p-5 sm:p-6 flex flex-col items-center text-center gap-4">
               <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center">
                 <AlertTriangle className="w-6 h-6 text-red-500" />
               </div>

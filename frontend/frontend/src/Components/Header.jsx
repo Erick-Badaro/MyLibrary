@@ -18,16 +18,20 @@ const Header = () => {
     };
 
     return (
-        <header className="w-full bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between shadow-sm">
-            <div className="flex items-center gap-3">
-                <div className="bg-indigo-50 p-2 rounded-xl">
+        <header className="w-full bg-white border-b border-gray-200 px-4 sm:px-8 py-4 flex items-center justify-between shadow-sm">
+            {/* Lado Esquerdo - Logo e Título */}
+            <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-indigo-50 p-2 rounded-xl hidden sm:block">
                     <BookOpen className="w-6 h-6 text-indigo-600" />
                 </div>
-                <h1 className="text-xl font-bold text-gray-900">Minha Biblioteca</h1>
+                <h1 className="text-lg sm:text-xl font-bold text-gray-900 truncate max-w-[160px] sm:max-w-none">
+                    Minha Biblioteca
+                </h1>
             </div>
 
-            <div className="flex items-center gap-6">
-                <span className="text-gray-600 font-medium">
+            {/* Lado Direito - Saudação e Botão Sair */}
+            <div className="flex items-center gap-4 sm:gap-6">
+                <span className="hidden sm:block text-gray-600 font-medium truncate max-w-[150px] md:max-w-none">
                     Olá, {userName || "Usuário"}
                 </span>
                 <button

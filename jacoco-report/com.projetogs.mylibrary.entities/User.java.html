@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.projetogs.mylibrary.entities</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.projetogs.mylibrary.entities;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = &quot;users&quot;)
+public class User {
+
+    @Id
+    private String id;
+    private String name;
+    private String email;
+    private String password;
+    private String zipCode;
+    private String street;
+    private String neighborhood;
+    private String city;
+    private String state;
+    private String number;
+    private String complement;
+
+<span class="fc" id="L22">    public User() {</span>
+<span class="fc" id="L23">    }</span>
+
+<span class="fc" id="L25">    public User(String name, String email, String password) {</span>
+<span class="fc" id="L26">        this.name = name;</span>
+<span class="fc" id="L27">        this.email = email;</span>
+<span class="fc" id="L28">        this.password = password;</span>
+<span class="fc" id="L29">    }</span>
+
+    public String getPassword() {
+<span class="fc" id="L32">        return password;</span>
+    }
+
+    public void setPassword(String password) {
+<span class="fc" id="L36">        this.password = password;</span>
+<span class="fc" id="L37">    }</span>
+
+    public String getEmail() {
+<span class="fc" id="L40">        return email;</span>
+    }
+
+    public void setEmail(String email) {
+<span class="fc" id="L44">        this.email = email;</span>
+<span class="fc" id="L45">    }</span>
+
+    public String getName() {
+<span class="fc" id="L48">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="fc" id="L52">        this.name = name;</span>
+<span class="fc" id="L53">    }</span>
+
+    public String getId() {
+<span class="fc" id="L56">        return id;</span>
+    }
+
+    public void setId(String id) {
+<span class="fc" id="L60">        this.id = id;</span>
+<span class="fc" id="L61">    }</span>
+
+    public String getZipCode() {
+<span class="fc" id="L64">        return zipCode;</span>
+    }
+
+    public void setZipCode(String zipCode) {
+<span class="fc" id="L68">        this.zipCode = zipCode;</span>
+<span class="fc" id="L69">    }</span>
+
+    public String getStreet() {
+<span class="fc" id="L72">        return street;</span>
+    }
+
+    public void setStreet(String street) {
+<span class="fc" id="L76">        this.street = street;</span>
+<span class="fc" id="L77">    }</span>
+
+    public String getNeighborhood() {
+<span class="fc" id="L80">        return neighborhood;</span>
+    }
+
+    public void setNeighborhood(String neighborhood) {
+<span class="fc" id="L84">        this.neighborhood = neighborhood;</span>
+<span class="fc" id="L85">    }</span>
+
+    public String getCity() {
+<span class="fc" id="L88">        return city;</span>
+    }
+
+    public void setCity(String city) {
+<span class="fc" id="L92">        this.city = city;</span>
+<span class="fc" id="L93">    }</span>
+
+    public String getState() {
+<span class="fc" id="L96">        return state;</span>
+    }
+
+    public void setState(String state) {
+<span class="fc" id="L100">        this.state = state;</span>
+<span class="fc" id="L101">    }</span>
+
+    public String getNumber() {
+<span class="fc" id="L104">        return number;</span>
+    }
+
+    public void setNumber(String number) {
+<span class="fc" id="L108">        this.number = number;</span>
+<span class="fc" id="L109">    }</span>
+
+    public String getComplement() {
+<span class="fc" id="L112">        return complement;</span>
+    }
+
+    public void setComplement(String complement) {
+<span class="fc" id="L116">        this.complement = complement;</span>
+<span class="fc" id="L117">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

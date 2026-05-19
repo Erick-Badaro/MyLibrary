@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BookController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.projetogs.mylibrary.controller</a> &gt; <span class="el_source">BookController.java</span></div><h1>BookController.java</h1><pre class="source lang-java linenums">package com.projetogs.mylibrary.controller;
+
+import com.projetogs.mylibrary.dto.BookDTO;
+import com.projetogs.mylibrary.dto.BookDTOGet;
+import com.projetogs.mylibrary.enums.ReadingStatus;
+import com.projetogs.mylibrary.security.UserSystem;
+import com.projetogs.mylibrary.service.BookService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/books&quot;)
+@CrossOrigin(origins = &quot;*&quot;)
+@SecurityRequirement(name = &quot;bearer-jwt&quot;)
+<span class="fc" id="L21">public class BookController {</span>
+    @Autowired
+    private BookService bookService;
+
+    @GetMapping()
+    public ResponseEntity&lt;List&lt;BookDTOGet&gt;&gt; getBooksByUserId(@RequestParam(required = false) ReadingStatus status, Authentication authentication){
+<span class="fc" id="L27">        UserSystem user = (UserSystem) authentication.getPrincipal();</span>
+<span class="fc" id="L28">        String id = user.getId();</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (status != null){</span>
+<span class="fc" id="L30">            return ResponseEntity.ok(bookService.getBooksByUserIdAndStatus(id,status));</span>
+        }
+<span class="fc" id="L32">        return ResponseEntity.ok(bookService.getBooksByUserId(id));</span>
+    }
+
+    @PostMapping()
+    public ResponseEntity&lt;BookDTO&gt; createBook (@RequestBody BookDTO dto, Authentication authentication){
+<span class="fc" id="L37">        UserSystem user = (UserSystem) authentication.getPrincipal();</span>
+<span class="fc" id="L38">        String id = user.getId();</span>
+<span class="fc" id="L39">        BookDTO created = bookService.createBook(id, dto);</span>
+<span class="fc" id="L40">        return ResponseEntity.status(HttpStatus.CREATED).body(created);</span>
+    }
+
+    @PutMapping(&quot;/{bookId}&quot;)
+    public ResponseEntity&lt;BookDTO&gt; updateBook (@PathVariable String bookId, @RequestBody BookDTO dto, Authentication authentication){
+<span class="fc" id="L45">        UserSystem user = (UserSystem) authentication.getPrincipal();</span>
+<span class="fc" id="L46">        String id = user.getId();</span>
+<span class="fc" id="L47">        BookDTO updated = bookService.updateBook(id, bookId, dto);</span>
+<span class="fc" id="L48">        return ResponseEntity.ok(updated);</span>
+    }
+
+    @DeleteMapping(&quot;/{bookId}&quot;)
+    public ResponseEntity&lt;Void&gt; deleteBook (@PathVariable String bookId, Authentication authentication){
+<span class="fc" id="L53">        UserSystem user = (UserSystem) authentication.getPrincipal();</span>
+<span class="fc" id="L54">        String id = user.getId();</span>
+<span class="fc" id="L55">       bookService.deleteBook(id, bookId);</span>
+<span class="fc" id="L56">       return ResponseEntity.noContent().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

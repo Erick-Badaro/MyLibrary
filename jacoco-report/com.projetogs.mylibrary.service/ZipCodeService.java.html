@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ZipCodeService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.projetogs.mylibrary.service</a> &gt; <span class="el_source">ZipCodeService.java</span></div><h1>ZipCodeService.java</h1><pre class="source lang-java linenums">package com.projetogs.mylibrary.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
+
+
+import com.projetogs.mylibrary.dto.ZipCodeResponseDTO;
+
+@Service
+public class ZipCodeService {
+
+    private final RestTemplate restTemplate;
+    private final String viaCepUrl; 
+    
+    public ZipCodeService(RestTemplate restTemplate,
+<span class="fc" id="L18">            @Value(&quot;${viacep.url:https://viacep.com.br/ws/}&quot;) String viaCepUrl) {</span>
+<span class="fc" id="L19">        this.restTemplate = restTemplate;</span>
+<span class="fc" id="L20">        this.viaCepUrl = viaCepUrl;</span>
+<span class="fc" id="L21">    }</span>
+
+    public ZipCodeResponseDTO fetchZipCode(String zipCode) {
+        try {
+<span class="fc" id="L25">            String cleanZipCode = zipCode.replaceAll(&quot;[^0-9]&quot;, &quot;&quot;);</span>
+
+<span class="fc bfc" id="L27" title="All 2 branches covered.">            if (cleanZipCode.length() != 8) {</span>
+<span class="fc" id="L28">                throw new IllegalArgumentException(&quot;CEP deve conter 8 dígitos&quot;);</span>
+            }
+
+<span class="fc" id="L31">            String url = viaCepUrl + cleanZipCode + &quot;/json/&quot;;  // ← 3. usa o campo</span>
+<span class="fc" id="L32">            ZipCodeResponseDTO response = restTemplate.getForObject(url, ZipCodeResponseDTO.class);</span>
+
+<span class="pc bpc" id="L34" title="2 of 6 branches missed.">            if (response != null &amp;&amp; response.getZipCode() != null &amp;&amp; !response.getZipCode().isEmpty()) {</span>
+<span class="fc" id="L35">                return response;</span>
+            } else {
+<span class="fc" id="L37">                throw new IllegalArgumentException(&quot;CEP não encontrado&quot;);</span>
+            }
+<span class="nc" id="L39">        } catch (RestClientException e) {</span>
+<span class="nc" id="L40">            throw new RuntimeException(&quot;Erro ao consultar API de CEP: &quot; + e.getMessage());</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

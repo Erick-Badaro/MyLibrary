@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.projetogs.mylibrary.service</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package com.projetogs.mylibrary.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.projetogs.mylibrary.dto.UserDTO;
+import com.projetogs.mylibrary.entities.User;
+import com.projetogs.mylibrary.repository.UserRepository;
+
+@Service
+<span class="fc" id="L12">public class UserService {</span>
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserRepository repository;
+
+    public UserDTO addNewUser(UserDTO dto) {
+<span class="fc" id="L21">        User user = new User();</span>
+<span class="fc" id="L22">        user.setName(dto.name());</span>
+<span class="fc" id="L23">        user.setEmail(dto.email());</span>
+<span class="fc" id="L24">        user.setPassword(passwordEncoder.encode(dto.password()));</span>
+<span class="fc" id="L25">        user.setZipCode(dto.zipCode());</span>
+<span class="fc" id="L26">        user.setStreet(dto.street());</span>
+<span class="fc" id="L27">        user.setNeighborhood(dto.neighborhood());</span>
+<span class="fc" id="L28">        user.setCity(dto.city());</span>
+<span class="fc" id="L29">        user.setState(dto.state());</span>
+<span class="fc" id="L30">        user.setNumber(dto.number());</span>
+<span class="fc" id="L31">        user.setComplement(dto.complement());</span>
+        
+<span class="fc" id="L33">        User saved = repository.save(user);</span>
+        
+<span class="fc" id="L35">        return new UserDTO(</span>
+<span class="fc" id="L36">            saved.getName(), </span>
+<span class="fc" id="L37">            saved.getEmail(), </span>
+<span class="fc" id="L38">            saved.getPassword(),</span>
+<span class="fc" id="L39">            saved.getZipCode(),</span>
+<span class="fc" id="L40">            saved.getStreet(),</span>
+<span class="fc" id="L41">            saved.getNeighborhood(),</span>
+<span class="fc" id="L42">            saved.getCity(),</span>
+<span class="fc" id="L43">            saved.getState(),</span>
+<span class="fc" id="L44">            saved.getNumber(),</span>
+<span class="fc" id="L45">            saved.getComplement()</span>
+        );
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

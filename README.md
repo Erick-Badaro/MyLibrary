@@ -55,12 +55,15 @@ mylibrary/
 │   │   ├── enums/             # Enumerações (ReadingStatus)
 │   │   ├── jwt/               # Geração e validação de tokens
 │   │   └── security/          # Configuração Spring Security
-│   └── test/java/com/projetogs/mylibrary/
-│       ├── repository/        # Testes de repositório (Testcontainers)
-│       ├── service/           # Testes de serviço (Testcontainers)
-│       ├── controller/        # Testes E2E (MockMvc)
-|       ├── dto/               # Testes Data Transfer Object
-│       └── vcr/               # Testes VCR (MockWebServer)
+│   ├── test/java/com/projetogs/mylibrary/
+│   │   ├── repository/        # Testes de repositório (Testcontainers)
+│   │   ├── service/           # Testes de serviço (Testcontainers)
+│   │   ├── controller/        # Testes E2E (MockMvc)
+│   │   ├── dto/               # Testes Data Transfer Object
+|   |   ├── util/              # VcrHelper
+│   │   └── vcr/               # Testes VCR (cassettes)
+│   └── resources/
+|       └── vcr-cassettes/     # Armazenamentos dos cassettes
 └── frontend/                  # Interface Web
 ```
 
@@ -113,7 +116,7 @@ mylibrary/
 | **Repositório** | `RepositoryTest.java` | Testcontainers (MongoDB) |
 | **Serviço — Usuário** | `UserServiceTest.java` | Testcontainers (MongoDB) |
 | **Serviço — Livro** | `BookServiceTest.java` | Testcontainers (MongoDB) |
-| **VCR — ViaCEP** | `ZipCodeServiceTest.java` | MockWebServer (OkHttp) |
+| **VCR — ViaCEP** | `ZipCodeServiceTest.java` | Cassettes (VcrHelper) |
 
 ### Cobertura Mínima Exigida
 
@@ -243,11 +246,13 @@ push / pull_request
 |---|---|
 | [`RTM.md`](./RTM.md) | Matriz de Rastreabilidade de Requisitos com diagramas UML |
 | [`swagger-ui`](http://localhost:8080/swagger-ui.html) | Documentação interativa da API |
-| `target/site/jacoco/` | Relatório de cobertura de testes (gerado localmente) |
+| [`Jacoco Report`](./jacoco-report) | Relatório de cobertura de testes |
+| [`SonarCloud Report`](https://sonarcloud.io/project/overview?id=Erick-Badaro_MyLibrary) | Relatório de cobertura SonarCloud |
+
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Autores
 
 Desenvolvido por **Erick Badaro** e **Gabriel Antonio** como projeto semestral da disciplina de Qualidade de Software.
 

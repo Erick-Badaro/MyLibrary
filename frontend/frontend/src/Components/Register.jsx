@@ -105,8 +105,8 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
-      <div className="bg-white w-full max-w-[400px] p-8 rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]">
-        <div className="flex flex-col items-center mb-8">
+      <div className="bg-white w-full max-w-[450px] p-6 sm:p-8 rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] mx-auto">
+        <div className="flex flex-col items-center mb-6 sm:mb-8">
           <div className="bg-indigo-50 p-3 rounded-2xl mb-4">
             <BookOpen className="w-6 h-6 text-indigo-600" />
           </div>
@@ -197,8 +197,8 @@ const Register = () => {
 
           {step === 2 && !successMessage && (
             <>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-1">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="sm:col-span-1">
                   <label
                     className="block text-sm font-medium text-gray-700 mb-1.5"
                     htmlFor="zipCode"
@@ -220,7 +220,7 @@ const Register = () => {
                     <p className="text-xs text-red-500 mt-1">{zipError}</p>
                   )}
                 </div>
-                <div className="col-span-2">
+                <div className="sm:col-span-2">
                   <label
                     className="block text-sm font-medium text-gray-700 mb-1.5"
                     htmlFor="street"
@@ -239,8 +239,8 @@ const Register = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-1">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="sm:col-span-1">
                   <label
                     className="block text-sm font-medium text-gray-700 mb-1.5"
                     htmlFor="number"
@@ -256,7 +256,7 @@ const Register = () => {
                     className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="sm:col-span-2">
                   <label
                     className="block text-sm font-medium text-gray-700 mb-1.5"
                     htmlFor="complement"
@@ -292,8 +292,8 @@ const Register = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="sm:col-span-2">
                   <label
                     className="block text-sm font-medium text-gray-700 mb-1.5"
                     htmlFor="city"
@@ -310,7 +310,7 @@ const Register = () => {
                     className="w-full px-4 py-2.5 bg-gray-100 border border-gray-200 rounded-lg"
                   />
                 </div>
-                <div className="col-span-1">
+                <div className="sm:col-span-1">
                   <label
                     className="block text-sm font-medium text-gray-700 mb-1.5"
                     htmlFor="state"
@@ -329,7 +329,7 @@ const Register = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4 mt-4">
+              <div className="flex flex-col-reverse sm:flex-row items-center gap-3 sm:gap-4 mt-4">
                 <button
                   type="button"
                   onClick={handleBack}

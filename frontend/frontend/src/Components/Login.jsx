@@ -45,7 +45,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
-      <div className="bg-white w-full max-w-[400px] p-8 rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)]">
+      <div className="bg-white w-full max-w-[400px] p-6 sm:p-8 rounded-2xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] mx-auto">
         <div className="flex flex-col items-center mb-8">
           <div className="bg-indigo-50 p-3 rounded-2xl mb-4">
             <BookOpen className="w-6 h-6 text-indigo-600" />

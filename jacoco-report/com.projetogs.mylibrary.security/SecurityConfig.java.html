@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report"></a> &gt; <a href="index.source.html" class="el_package">com.projetogs.mylibrary.security</a> &gt; <span class="el_source">SecurityConfig.java</span></div><h1>SecurityConfig.java</h1><pre class="source lang-java linenums">package com.projetogs.mylibrary.security;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.projetogs.mylibrary.jwt.JwtAuthenticationFilter;
+import com.projetogs.mylibrary.service.UserSystemService;
+
+@Configuration
+@EnableWebSecurity
+<span class="fc" id="L30">public class SecurityConfig {</span>
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthFilter;
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+<span class="fc" id="L37">        Map&lt;String, PasswordEncoder&gt; encoders = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L38">        BCryptPasswordEncoder bcryptEnc = new BCryptPasswordEncoder();</span>
+<span class="fc" id="L39">        encoders.put(&quot;bcrypt&quot;, bcryptEnc);</span>
+<span class="fc" id="L40">        encoders.put(&quot;noop&quot;, NoOpPasswordEncoder.getInstance());</span>
+<span class="fc" id="L41">        var passwordEncoder = new DelegatingPasswordEncoder(&quot;bcrypt&quot;, encoders);</span>
+<span class="fc" id="L42">        passwordEncoder.setDefaultPasswordEncoderForMatches(bcryptEnc);</span>
+<span class="fc" id="L43">        return passwordEncoder;</span>
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(
+            UserSystemService service,
+            PasswordEncoder passwordEncoder) {
+<span class="fc" id="L50">        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(service);</span>
+<span class="fc" id="L51">        authProvider.setPasswordEncoder(passwordEncoder);</span>
+<span class="fc" id="L52">        return new ProviderManager(authProvider);</span>
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+<span class="fc" id="L57">        return http</span>
+<span class="fc" id="L58">                .cors(cors -&gt; cors.configurationSource(corsConfigurationSource()))</span>
+<span class="fc" id="L59">                .csrf(csrf -&gt; csrf.disable())</span>
+<span class="fc" id="L60">                .formLogin(form -&gt; form.disable())</span>
+<span class="fc" id="L61">                .authorizeHttpRequests(authorize -&gt; authorize</span>
+<span class="fc" id="L62">                        .requestMatchers(</span>
+                                &quot;/v3/api-docs/**&quot;,
+                                &quot;/swagger-ui/**&quot;,
+                                &quot;/swagger-ui.html&quot;
+<span class="fc" id="L66">                        ).permitAll()</span>
+<span class="fc" id="L67">                        .requestMatchers(&quot;/user/**&quot;).permitAll()</span>
+<span class="fc" id="L68">                        .anyRequest().authenticated())</span>
+<span class="fc" id="L69">                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)</span>
+<span class="fc" id="L70">                .build();</span>
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+<span class="fc" id="L75">        CorsConfiguration configuration = new CorsConfiguration();</span>
+<span class="fc" id="L76">        configuration.setAllowedOrigins(Arrays.asList(&quot;http://localhost:5173&quot;, &quot;http://localhost:3000&quot;));</span>
+<span class="fc" id="L77">        configuration.setAllowedMethods(Arrays.asList(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;, &quot;HEAD&quot;));</span>
+<span class="fc" id="L78">        configuration.setAllowedHeaders(Arrays.asList(&quot;Authorization&quot;, &quot;Content-Type&quot;));</span>
+        
+<span class="fc" id="L80">        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();</span>
+<span class="fc" id="L81">        source.registerCorsConfiguration(&quot;/**&quot;, configuration);</span>
+<span class="fc" id="L82">        return source;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,15 @@
+{
+  "http_interactions" : [ {
+    "response" : {
+      "status" : {
+        "code" : 200
+      },
+      "headers" : {
+        "Content-Type" : "application/json"
+      },
+      "body" : {
+        "erro" : "true"
+      }
+    }
+  } ]
+}

@@ -12,7 +12,6 @@
 **Gerencie sua biblioteca pessoal com qualidade e elegância.**
 
 [![CI](https://github.com/Erick-Badaro/MyLibrary/actions/workflows/ci.yml/badge.svg)](https://github.com/Erick-Badaro/MyLibrary/actions/workflows/ci.yml)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=Erick-Badaro_MyLibrary&metric=alert_status&branch=main)](https://sonarcloud.io/summary/new_code?id=Erick-Badaro_MyLibrary&branch=main)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Erick-Badaro_MyLibrary&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Erick-Badaro_MyLibrary)
 [![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)](https://openjdk.org/projects/jdk/21/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-brightgreen?logo=springboot)](https://spring.io/projects/spring-boot)

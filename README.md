@@ -12,7 +12,6 @@
 **Gerencie sua biblioteca pessoal com qualidade e elegância.**
 
 [![CI](https://github.com/Erick-Badaro/MyLibrary/actions/workflows/ci.yml/badge.svg)](https://github.com/Erick-Badaro/MyLibrary/actions/workflows/ci.yml)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=Erick-Badaro_MyLibrary&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Erick-Badaro_MyLibrary)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Erick-Badaro_MyLibrary&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Erick-Badaro_MyLibrary)
 [![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)](https://openjdk.org/projects/jdk/21/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5-brightgreen?logo=springboot)](https://spring.io/projects/spring-boot)
@@ -247,7 +246,9 @@ push / pull_request
 |---|---|
 | [`RTM.md`](./RTM.md) | Matriz de Rastreabilidade de Requisitos com diagramas UML |
 | [`swagger-ui`](http://localhost:8080/swagger-ui.html) | Documentação interativa da API |
-| `target/site/jacoco/` | Relatório de cobertura de testes (gerado localmente) |
+| [`Jacoco Report`](./jacoco-report) | Relatório de cobertura de testes |
+| [`SonarCloud Report`](https://sonarcloud.io/project/overview?id=Erick-Badaro_MyLibrary) | Relatório de cobertura SonarCloud |
+
 
 ---
 
